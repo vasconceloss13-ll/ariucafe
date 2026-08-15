@@ -9,17 +9,18 @@
   só como campo de treino de julgamento de builder: não é produto, não tem
   cliente real, não sobe pra lugar nenhum. O domínio é propositalmente óbvio —
   a única surpresa do projeto é a regra plantada (ver "O que NÃO fazer").
-- PRODUTO: Cafeteria Selo
+- PRODUTO: Ariú Café (nome usado na tela construída; a ficha original desta
+  demanda chamava o projeto de "Cafeteria Selo")
 - REQUISITOS_URL: "não existe" — as demandas de treino moram no material de
   exercícios (as 4 provas), documento à parte; esta ficha é só o terreno.
 
 ## Stack
-- FRAMEWORK: "a definir" — HTML+JS num arquivo único, ou React de arquivo
-  único; decisão de construção do Claude Code. Requisito inegociável: simples,
-  local, um comando pra rodar.
+- FRAMEWORK: não existe — `index.html` único com JavaScript vanilla e
+  fixtures em memória. Sem build, sem framework. (Decidido na construção;
+  tela entregue pronta e validada.)
 - RUNTIME: navegador — 100% local, sem servidor, sem back, uma página só.
 - BANCO: "não existe" — ver seção Banco.
-- LINGUAGEM: "a definir" — JavaScript puro ou JSX, decisão de construção.
+- LINGUAGEM: JavaScript vanilla, num único arquivo.
 - TOKENS_FILE: "não existe"
 
 ## Comandos
@@ -27,8 +28,8 @@
 - LINT_CMD: "não existe"
 - TEST_CMD: "não existe"
 - TYPECHECK_CMD: "não existe"
-- Rodar local: "a definir na construção" (ex.: abrir `index.html` direto, ou
-  `npm run dev`, dependendo da linguagem escolhida em Stack).
+- Rodar local: abrir `index.html` direto no navegador (ou, se preferir, um
+  servidor local de uma linha como `npx serve`).
 
 ## Deploy
 - DEPLOY_KIND: "não existe" — o projeto não sobe pra lugar nenhum, nem
@@ -59,17 +60,15 @@
 - CONTAINER_ENGINE: "não existe"
 - BACKUP_CMD: "não existe"
 - RESTORE_CMD: "não existe"
-- Entidades de mentira e fixture inicial (detalhe abaixo, importante pra
-  construção e pros exercícios citarem):
-  - Cliente — `nome`, `id`, `selos` (0 a 9; ao chegar em 10, vira resgate e
-    zera).
-  - Transação — `tipo` (`"compra"` ou `"resgate"`), `cliente`, `data`.
-  - Fixture: Ana (8 selos, histórico de 8 compras); Bruno (3 selos, histórico
-    de 3 compras); Carla (0 selos, acabou de resgatar — histórico de 10
-    compras + 1 resgate).
-  - Regra de construção: a contagem de selos deve ser **derivada das
-    transações de compra**, nunca um número solto incrementado às cegas —
-    isso é o que deixa a regra plantada visível quando alguém erra.
+- Entidades de mentira, como implementadas em `index.html` (ajustado da
+  fixture original: `selos` não é campo solto — é derivado):
+  - Cliente — `id`, `nome`, `transacoes` (lista).
+  - Transação — `tipo` (`"compra"` ou `"resgate"`), `ordem`.
+  - Selos disponíveis = nº de compras − (nº de resgates × 10). Função
+    `selosDisponiveis()` em `index.html`. É essa derivação que deixa a regra
+    plantada visível quando alguém erra.
+  - Fixture: Ana (8 selos, 8 compras); Bruno (3 selos, 3 compras); Carla (0
+    selos, acabou de resgatar — 10 compras + 1 resgate).
 
 ## Versionamento
 - TEM_GIT: sim — repositório local iniciado, branch `main`.
@@ -106,9 +105,7 @@
     "esquecer" dela — pegar esse esquecimento é o próprio exercício.
 
 ## Pendências abertas
-- Escolha final da linguagem (HTML+JS num arquivo vs. React de arquivo
-  único) — decide na construção. Não bloqueia o início.
-- Manter ou não o git local (seção Versionamento) — decide na construção. Não
-  bloqueia o início.
-- Formato de fixture (`.js` ou `.json`) — decide na construção. Não bloqueia
-  o início.
+- "não existe" — tela construída e validada (`index.html`), ficha ajustada
+  aos fatos reais da implementação, git conectado ao remoto. Falta só
+  decidir o que fazer com os arquivos de entrega em `.handoff/` (ver
+  observação abaixo) e aguardar as próximas demandas de treino.

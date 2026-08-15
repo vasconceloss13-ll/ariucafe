@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ariú Café — cartão fidelidade</title>
+<style>
+  :root{
+    --kraft:#e3d5b6;        /* fundo: papel kraft */
+    --kraft-esc:#d8c8a3;
+    --papel:#faf5e9;        /* superfície do cartão */
+    --tinta:#1a5c4a;        /* verde carimbo: a assinatura */
+    --tinta-fraca:#1a5c4a26;
+    --espresso:#2b2118;     /* texto */
+    --suave:#8b7c67;        /* texto secundário */
+    --ouro:#b0801f;         /* estado de recompensa */
+    --ouro-fundo:#f3e6c4;
+    --linha:#cdbc98;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; padding:32px 18px;
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    color:var(--espresso);
+    background:
+      radial-gradient(120% 80% at 50% -10%, #ece0c6 0%, var(--kraft) 55%) fixed;
+    line-height:1.5;
+  }
+  .folha{max-width:600px; margin:0 auto;}
+
+  /* Cabeçalho */
+  .marca{ text-align:center; margin-bottom:26px; }
+  .eyebrow{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:11px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--tinta); font-weight:600; margin:0 0 6px;
+  }
+  .marca h1{ margin:0; font-size:34px; font-weight:600; letter-spacing:-.01em; }
+  .marca .regra{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:12.5px; color:var(--suave); margin:6px 0 0;
+  }
+  .treino{
+    font-family:ui-monospace,"SF Mono",Menlo,monospace;
+    font-size:11px; color:var(--suave); text-align:center;
+    border-top:1px dashed var(--linha); border-bottom:1px dashed var(--linha);
+    padding:7px 0; margin:18px auto 26px; max-width:440px;
+  }
+
+  /* Cartão do cliente */
+  .cartao{
+    position:relative; background:var(--papel);
+    border:1px solid var(--linha); border-radius:12px;
+    padding:18px 20px; margin-bottom:14px;
+    box-shadow:0 1px 0 #fff inset, 0 6px 16px -12px rgba(43,33,24,.5);
+  }
+  .cartao.premiado{ border-color:var(--ouro); box-shadow:0 0 0 1px var(--ouro) inset, 0 6px 16px -12px rgba(43,33,24,.5); }
+  .topo{ display:flex; align-items:baseline; gap:10px; margin-bottom:14px; }
+  .nome{ font-size:20px; font-weight:600; }
+  .contagem{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:13px; color:var(--suave); margin-left:auto; font-variant-numeric:tabular-nums;
+  }
+  .contagem b{ color:var(--espresso); font-size:15px; }
+  .pilula{
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    font-size:11px; font-weight:700; letter-spacing:.04em;
+    color:var(--ouro); background:var(--ouro-fundo);
+    border:1px solid #e4cd93; border-radius:999px; padding:3px 9px; margin-left:auto;
+    text-transform:uppercase;
+  }
+
+  /* A assinatura: cartão de selos */
+  .selos{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .selo{
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .selo.vazio{ border:1.5px dashed var(--linha); }
+  .selo.vazio svg{ opacity:.18; }
+  .selo.cheio{ background:var(--tinta); box-shadow:0 1px 2px rgba(26,92,74,.4); }
+  .selo.cheio svg{ color:var(--papel); }
+  .selo.pop{ animation:carimbar .3s cubic-bezier(.3,1.4,.5,1); }
+  @keyframes carimbar{ 0%{transform:scale(.4) rotate(-12deg);opacity:.3;} 60%{transform:scale(1.12) rotate(3deg);} 100%{transform:scale(1);} }
+  .extra{
+    font-family:ui-sans-serif,system-ui,sans-serif; font-size:12px;
+    color:var(--tinta); font-weight:700; align-self:center; margin-left:2px;
+  }
+
+  /* Ações */
+  .acoes{ display:flex; gap:9px; flex-wrap:wrap; }
+  button{
+    font-family:ui-sans-serif,system-ui,sans-serif; font-size:13.5px; font-weight:600;
+    padding:9px 15px; border-radius:8px; cursor:pointer; border:1px solid transparent;
+    transition:transform .08s ease;
+  }
+  button:active{ transform:translateY(1px); }
+  .btn-compra{ background:var(--tinta); color:var(--papel); }
+  .btn-compra:hover{ background:#164e3f; }
+  .btn-resgate{ background:transparent; color:var(--suave); border-color:var(--linha); }
+  .btn-resgate:disabled{ color:#bcae94; cursor:not-allowed; opacity:.7; }
+  .btn-resgate.pronto{ background:var(--ouro); color:#fff; border-color:var(--ouro); }
+  .btn-resgate.pronto:hover{ background:#9a6f1a; }
+
+  /* Comprovante (log) */
+  .comprovante{
+    margin-top:30px; background:var(--papel);
+    border-radius:10px; padding:16px 20px 20px;
+    box-shadow:0 6px 16px -12px rgba(43,33,24,.5);
+    font-family:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  .comprovante h2{
+    font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--suave);
+    text-align:center; margin:0 0 4px; font-weight:600;
+  }
+  .comprovante .rip{ border-top:1px dashed var(--linha); margin:10px -20px; }
+  .comprovante .item{ display:flex; justify-content:space-between; font-size:12.5px; padding:5px 0; color:var(--espresso); }
+  .comprovante .item span:last-child{ color:var(--suave); }
+  .comprovante .item.free span:last-child{ color:var(--ouro); }
+  .comprovante .vazio{ font-size:12.5px; color:#b3a488; text-align:center; padding:6px 0; }
+
+  @media (max-width:420px){
+    .selo{ width:28px; height:28px; }
+    .marca h1{ font-size:28px; }
+  }
+  @media (prefers-reduced-motion:reduce){ .selo.pop{ animation:none; } }
+</style>
+</head>
+<body>
+<div class="folha">
+
+  <div class="marca">
+    <p class="eyebrow">Cartão fidelidade</p>
+    <h1>Ariú Café</h1>
+    <p class="regra">A cada 10 selos, um café por nossa conta.</p>
+  </div>
+
+  <div class="treino">ambiente de treino · dados fictícios · recarregar reinicia tudo</div>
+
+  <div id="clientes"></div>
+
+  <div class="comprovante">
+    <h2>Movimento</h2>
+    <div class="rip"></div>
+    <div id="log"></div>
+  </div>
+
+</div>
+
+<script>
+  // ícone de xícara (SVG reutilizado nos selos)
+  const CUP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>';
+
+  // ---- "faz-de-conta de banco": dados mockados em memória ----
+  // Cada cliente guarda suas transações. O nº de selos é DERIVADO delas.
+  let contadorTempo = 0;
+  function tx(tipo){ return { tipo:tipo, ordem:contadorTempo++ }; }
+  function txIniciais(compras, resgates){
+    const l=[];
+    for(let i=0;i<compras;i++) l.push(tx('compra'));
+    for(let i=0;i<resgates;i++) l.push(tx('resgate'));
+    return l;
+  }
+
+  let clientes = [
+    { id:1, nome:'Ana',   transacoes: txIniciais(8,0) },   // 8 selos
+    { id:2, nome:'Bruno', transacoes: txIniciais(3,0) },   // 3 selos
+    { id:3, nome:'Carla', transacoes: txIniciais(10,1) },  // 0 selos (acabou de resgatar)
+  ];
+
+  // ---- REGRA DO BASELINE (correta de propósito) ----
+  // Selo vem só de COMPRA. Resgate NÃO gera selo; ele consome 10.
+  function selosDisponiveis(cliente){
+    const compras  = cliente.transacoes.filter(t=>t.tipo==='compra').length;
+    const resgates = cliente.transacoes.filter(t=>t.tipo==='resgate').length;
+    return compras - resgates*10;
+  }
+
+  // ---- Ações ----
+  function registrarCompra(id){
+    const c = clientes.find(x=>x.id===id);
+    c.transacoes.push(tx('compra'));
+    render(id);
+  }
+  function resgatar(id){
+    const c = clientes.find(x=>x.id===id);
+    if(selosDisponiveis(c) < 10) return;   // só com 10+
+    c.transacoes.push(tx('resgate'));       // NÃO adiciona selo
+    render();
+  }
+
+  // ---- Tela ----
+  function render(carimbouId){
+    const box = document.getElementById('clientes');
+    box.innerHTML = '';
+    clientes.forEach(c=>{
+      const selos = selosDisponiveis(c);
+      const pode = selos >= 10;
+      const cheios = Math.max(0, Math.min(selos, 10));
+      const excedente = selos > 10 ? selos - 10 : 0;
+
+      let selosHTML = '';
+      for(let i=0;i<10;i++){
+        const cheio = i < cheios;
+        // anima só o último selo recém-carimbado do cliente que comprou
+        const pop = (cheio && c.id===carimbouId && i === cheios-1) ? ' pop' : '';
+        selosHTML += '<div class="selo '+(cheio?'cheio':'vazio')+pop+'">'+CUP+'</div>';
+      }
+      if(excedente>0) selosHTML += '<div class="extra">+'+excedente+'</div>';
+
+      const div = document.createElement('div');
+      div.className = 'cartao' + (pode?' premiado':'');
+      div.innerHTML =
+        '<div class="topo">'+
+          '<span class="nome">'+c.nome+'</span>'+
+          (pode
+            ? '<span class="pilula">café grátis!</span>'
+            : '<span class="contagem"><b>'+selos+'</b> / 10 selos</span>')+
+        '</div>'+
+        '<div class="selos">'+selosHTML+'</div>'+
+        '<div class="acoes">'+
+          '<button class="btn-compra" onclick="registrarCompra('+c.id+')">Registrar compra</button>'+
+          '<button class="btn-resgate'+(pode?' pronto':'')+'" onclick="resgatar('+c.id+')"'+(pode?'':' disabled')+'>Resgatar café</button>'+
+        '</div>';
+      box.appendChild(div);
+    });
+    renderLog();
+  }
+
+  function renderLog(){
+    const todas=[];
+    clientes.forEach(c=>c.transacoes.forEach(t=>todas.push({nome:c.nome,tipo:t.tipo,ordem:t.ordem})));
+    todas.sort((a,b)=>b.ordem-a.ordem);
+    const box=document.getElementById('log');
+    if(todas.length===0){ box.innerHTML='<div class="vazio">Sem movimento ainda. Registre a primeira compra.</div>'; return; }
+    box.innerHTML = todas.slice(0,8).map(t=>
+      '<div class="item'+(t.tipo==='resgate'?' free':'')+'">'+
+        '<span>'+t.nome+'</span>'+
+        '<span>'+(t.tipo==='compra'?'compra · +1 selo':'café grátis resgatado')+'</span>'+
+      '</div>'
+    ).join('');
+  }
+
+  render();
+</script>
+</body>
+</html>
