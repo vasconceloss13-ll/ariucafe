@@ -79,8 +79,10 @@
 
 ## Handoff
 - TEM_HANDOFF: "não existe" — as demandas de treino não moram nesta pasta,
-  moram no material de exercícios (as 4 provas), documento à parte.
-- HANDOFF_DONE_DIR: "não existe"
+  moram no material de exercícios (as 4 provas), documento à parte. A pasta
+  `.handoff/` (oculta, renomeada de `handoff/`) guardou uma entrega pontual
+  de montagem inicial (tela pronta + instruções), já processada e arquivada.
+- HANDOFF_DONE_DIR: `.handoff/_done/<AAAA-MM-DD>/`
 
 ## Pontos quentes de segurança
 - Resumo: superfície de risco ~zero, de propósito — sandbox local, mockado,
