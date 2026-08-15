@@ -72,11 +72,11 @@
     isso é o que deixa a regra plantada visível quando alguém erra.
 
 ## Versionamento
-- TEM_GIT: "a definir" — git local, sem nuvem, pra treinar `commit`/`branch`
-  num ambiente onde nada vaza pra fora; pode cair se atrapalhar a simplicidade
-  (decisão de construção).
-- GIT_REMOTE: "não existe" — sem Bitbucket, sem repositório remoto, de
-  propósito.
+- TEM_GIT: sim — repositório local iniciado, branch `main`.
+- GIT_REMOTE: `https://github.com/vasconceloss13-ll/ariucafe` (GitHub,
+  conectado em 2026-08-15). Decisão original desta ficha era "sem nuvem, sem
+  repositório remoto" — revista a pedido da pessoa; o sandbox deixou de ser
+  100% local nesse sentido, mas segue sem deploy nenhum (ver seção Deploy).
 
 ## Handoff
 - TEM_HANDOFF: "não existe" — as demandas de treino não moram nesta pasta,
